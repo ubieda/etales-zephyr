@@ -1,0 +1,19 @@
+identifier: croxel_cx1763_nrf52840
+name: Croxel-CX1763-NRF52840
+type: mcu
+arch: arm
+ram: 256
+flash: 1024
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - arduino_gpio
+  - arduino_i2c
+  - ble
+  - counter
+  - gpio
+  - i2c
+  - watchdog
+vendor: nordic
