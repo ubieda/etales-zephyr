@@ -11,7 +11,9 @@ This repository assumes you have installed all of the dependencies listed on the
 
 Please note this repository has been developed and tested against [Zephyr Release 3.5.0](https://github.com/zephyrproject-rtos/zephyr/releases/tag/v3.5.0).
 
-### Setup using West Manifest
+### Set Development Environment
+
+#### Option 1 - Setup using West Manifest
 This option is useful to evaluate and try the libraries and examples available.
 
 ```console
@@ -21,7 +23,7 @@ west init -m https://github.com/ubieda/etales-zephyr
 west update
 ```
 
-### Setup including as an External Module
+#### Option 2 - Setup including as an External Module
 This option is useful when integrating the codebase as an external module. This approach assumes the Manifest is in the application, and works by adding it as a module dependency:
 
 ```yaml
@@ -29,4 +31,13 @@ This option is useful when integrating the codebase as an external module. This 
   path: modules/lib/etales-zephyr
   revision: master
   url: https://github.com/ubieda/etales-zephyr.git
+```
+
+### Build Sample Code - Hello World
+
+```console
+cd ~/zephyrproject/modules/lib/etales-zephyr
+source ~/zephyrproject/zephyr/zephyr-env.sh
+
+west build -b nrf52840dk_nrf52840 samples/hello_world
 ```
