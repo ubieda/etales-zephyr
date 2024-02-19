@@ -3,4 +3,6 @@
 
 menu "Embedded Tales - Zephyr"
 
+rsource "subsys/Kconfig"
+
 endmenu
