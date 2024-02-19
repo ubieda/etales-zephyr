@@ -2,6 +2,12 @@
 
 Contains source code (libraries and examples) referenced on https://embeddedtales.blog specific to the Zephyr Project. This repository can be used as an external module to leverage the existing codebase and speed-up development-process on Applications compatible with the Zephyr Project (as well as nRF Connect SDK).
 
+## Libraries and Samples
+
+### Shell over Bluetooth LE
+- [Library](subsys/shell/backends)
+- [Device Sample](samples/subsys/shell/bluetooth)
+
 ## Getting Started
 
 The best place to start using this repository is by following Zephyr's Getting Started Guide and getting familiar with the Zephyr Project.
