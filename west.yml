@@ -1,0 +1,9 @@
+manifest:
+  projects:
+    - name: zephyr
+      revision: v3.5.0
+      url: https://github.com/zephyrproject-rtos/zephyr
+      import: true
+
+  self:
+    path: modules/lib/etales-zephyr
