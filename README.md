@@ -7,6 +7,7 @@ Contains source code (libraries and examples) referenced on https://embeddedtale
 ### Shell over Bluetooth LE
 - [Library](subsys/shell/backends)
 - [Device Sample](samples/subsys/shell/bluetooth)
+- [User CLI App](scripts/bluetoothcli)
 
 ## Getting Started
 
