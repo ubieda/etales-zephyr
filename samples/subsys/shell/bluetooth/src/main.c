@@ -4,9 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <zephyr/shell/shell.h>
 #include <zephyr/kernel.h>
 
 extern int bt_app_init(void);
+
+/** @NOTE: Simple Custom command added to demo how to add your own  */
+int handler_bluetooth_name(const struct shell *sh, size_t argc, char **argv)
+{
+        shell_print(sh, "Bluetooth Name: %s", CONFIG_BT_DEVICE_NAME);
+
+        return 0;
+}
+
+SHELL_CMD_REGISTER(device_name, NULL, "Get Bluetooth Name", handler_bluetooth_name);
 
 int main(void)
 {
