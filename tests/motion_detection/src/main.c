@@ -41,3 +41,14 @@ ZTEST(motion_detection_testsuite, test_motion_init_ok)
 	err = motion_detection_init();
 	zassert_ok(err);
 }
+
+ZTEST(motion_detection_testsuite, test_motion_init_when_enabled_fails)
+{
+	int err;
+
+	err = motion_detection_init();
+	zassert_ok(err);
+
+	err = motion_detection_init();
+	zassert_equal(-EALREADY, err);
+}
