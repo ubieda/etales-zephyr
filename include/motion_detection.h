@@ -5,6 +5,7 @@
 
 enum motion_st {
 	MOTION_ST_UNKNOWN,
+	MOTION_ST_IDLE,
 	MOTION_ST_INVALID,
 };
 
