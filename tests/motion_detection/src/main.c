@@ -20,6 +20,7 @@ void testcase_before(void *unused)
 void testcase_after(void *unused)
 {
 	motion_detection_teardown();
+	accel_fake_teardown();
 	motion_st = MOTION_ST_INVALID;
 }
 
@@ -84,4 +85,21 @@ ZTEST(motion_detection_testsuite, test_motion_init_starts_with_uknown)
 	zassert_ok(motion_detection_listener_add(motion_detection_st_changed));
 	zassert_ok(motion_detection_init());
 	zassert_equal(MOTION_ST_UNKNOWN, motion_st);
+}
+
+ZTEST(motion_detection_testsuite, test_motion_enabled_polls_accel_once_per_sec)
+{
+	zassert_ok(motion_detection_init());
+
+	k_sleep(K_SECONDS(1));
+	zassert_equal(1, fake_stats_call_count(&accel_fake_stats, accel_fake_sample_fetch));
+	zassert_equal(1, fake_stats_call_count(&accel_fake_stats, accel_fake_channel_get));
+
+	k_sleep(K_SECONDS(1));
+	zassert_equal(2, fake_stats_call_count(&accel_fake_stats, accel_fake_sample_fetch));
+	zassert_equal(2, fake_stats_call_count(&accel_fake_stats, accel_fake_channel_get));
+
+	k_sleep(K_SECONDS(1));
+	zassert_equal(3, fake_stats_call_count(&accel_fake_stats, accel_fake_sample_fetch));
+	zassert_equal(3, fake_stats_call_count(&accel_fake_stats, accel_fake_channel_get));
 }
