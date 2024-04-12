@@ -15,7 +15,7 @@ int motion_detection_init(void)
 
 bool motion_detection_is_enabled(void)
 {
-	return true;
+	return motion_detect_enabled;
 }
 
 void motion_detection_teardown(void)
