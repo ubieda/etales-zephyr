@@ -2,6 +2,7 @@
 #include <motion_detection.h>
 
 bool motion_detect_enabled;
+motion_st_changed_t module_listener;
 
 int motion_detection_init(void)
 {
@@ -9,6 +10,8 @@ int motion_detection_init(void)
 		return -EALREADY;
 	}
 	motion_detect_enabled = true;
+
+	module_listener(MOTION_ST_UNKNOWN);
 
 	return 0;
 }
@@ -25,5 +28,7 @@ void motion_detection_teardown(void)
 
 int motion_detection_listener_add(motion_st_changed_t listener)
 {
+	module_listener = listener;
+
 	return 0;
 }
