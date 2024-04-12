@@ -22,3 +22,8 @@ void motion_detection_teardown(void)
 {
 	motion_detect_enabled = false;
 }
+
+int motion_detection_listener_add(motion_st_changed_t listener)
+{
+	return 0;
+}
