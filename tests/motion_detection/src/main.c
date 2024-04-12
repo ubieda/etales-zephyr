@@ -11,6 +11,7 @@ void testcase_before(void *unused)
 
 void testcase_after(void *unused)
 {
+	motion_detection_teardown();
 }
 
 ZTEST_SUITE(motion_detection_testsuite, NULL, NULL,
