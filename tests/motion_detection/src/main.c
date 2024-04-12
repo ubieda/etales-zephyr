@@ -33,3 +33,11 @@ ZTEST(motion_detection_testsuite, test_verify_fixture_installed)
  * - Transition to Movement state if Motion is sustained for 1 second.
  * - Once entered, stay in Movement state for 5 seconds.
  */
+
+ZTEST(motion_detection_testsuite, test_motion_init_ok)
+{
+	int err;
+
+	err = motion_detection_init();
+	zassert_ok(err);
+}
