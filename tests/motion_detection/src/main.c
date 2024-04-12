@@ -59,3 +59,8 @@ ZTEST(motion_detection_testsuite, test_motion_init_starts_engine)
 	zassert_ok(motion_detection_init());
 	zassert_true(motion_detection_is_enabled());
 }
+
+ZTEST(motion_detection_testsuite, test_motion_disabled_before_init)
+{
+	zassert_true(!motion_detection_is_enabled());
+}
