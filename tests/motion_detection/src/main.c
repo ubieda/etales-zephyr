@@ -5,6 +5,11 @@
 #include <fake/accel.h>
 #include <fake/stats.h>
 
+void motion_detection_st_changed(enum motion_st st)
+{
+	printk("Motion state changed: %d\n", st);
+}
+
 void testcase_before(void *unused)
 {
 }
@@ -63,4 +68,9 @@ ZTEST(motion_detection_testsuite, test_motion_init_starts_engine)
 ZTEST(motion_detection_testsuite, test_motion_disabled_before_init)
 {
 	zassert_true(!motion_detection_is_enabled());
+}
+
+ZTEST(motion_detection_testsuite, test_motion_add_listener_succeeds)
+{
+	zassert_ok(motion_detection_listener_add(motion_detection_st_changed));
 }
