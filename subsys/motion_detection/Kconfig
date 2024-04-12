@@ -1,2 +1,14 @@
 menuconfig MOTION_DETECTION
 	bool "Enable Motion Detection"
+
+if MOTION_DETECTION
+
+config MOTION_DETECTION_THREAD_STACK_SIZE
+	int "Motion Detection Thread Stack Size"
+	default 1024
+
+config MOTION_DETECTION_THREAD_PRIO
+	int "Motion Detection Thread Priority"
+	default 9
+
+endif
