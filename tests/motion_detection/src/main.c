@@ -103,3 +103,20 @@ ZTEST(motion_detection_testsuite, test_motion_enabled_polls_accel_once_per_sec)
 	zassert_equal(3, fake_stats_call_count(&accel_fake_stats, accel_fake_sample_fetch));
 	zassert_equal(3, fake_stats_call_count(&accel_fake_stats, accel_fake_channel_get));
 }
+
+ZTEST(motion_detection_testsuite, test_motion_st_idle_if_no_motion_for_5_secs)
+{
+	const struct sensor_value accel_fake_val[3] = {
+		{.val1 = 0,},{.val1 = 0,},{.val1 = 9,},
+	};
+	accel_fake_set_data(accel_fake_val, ARRAY_SIZE(accel_fake_val));
+
+	zassert_ok(motion_detection_listener_add(motion_detection_st_changed));
+	zassert_ok(motion_detection_init());
+
+	k_sleep(K_SECONDS(4));
+	zassert_equal(MOTION_ST_UNKNOWN, motion_st);
+
+	k_sleep(K_SECONDS(1));
+	zassert_equal(MOTION_ST_IDLE, motion_st);
+}
