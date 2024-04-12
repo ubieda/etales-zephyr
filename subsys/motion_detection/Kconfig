@@ -1,0 +1,2 @@
+menuconfig MOTION_DETECTION
+	bool "Enable Motion Detection"

@@ -1,1 +1,2 @@
 rsource "shell/Kconfig"
+rsource "motion_detection/Kconfig"

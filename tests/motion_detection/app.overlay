@@ -1,0 +1,6 @@
+/ {
+	motion_accel: motion_accel {
+		compatible = "fake,accel";
+		status = "okay";
+	};
+};

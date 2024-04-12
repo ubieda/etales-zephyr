@@ -1,0 +1,4 @@
+#ifndef _MOTION_DETECTION_H_
+#define _MOTION_DETECTION_H_
+
+#endif /* _MOTION_DETECTION_H_ */
