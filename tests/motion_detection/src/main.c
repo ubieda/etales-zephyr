@@ -5,9 +5,12 @@
 #include <fake/accel.h>
 #include <fake/stats.h>
 
+enum motion_st motion_st = MOTION_ST_INVALID;
+
 void motion_detection_st_changed(enum motion_st st)
 {
 	printk("Motion state changed: %d\n", st);
+	motion_st = st;
 }
 
 void testcase_before(void *unused)
@@ -17,6 +20,7 @@ void testcase_before(void *unused)
 void testcase_after(void *unused)
 {
 	motion_detection_teardown();
+	motion_st = MOTION_ST_INVALID;
 }
 
 ZTEST_SUITE(motion_detection_testsuite, NULL, NULL,
@@ -73,4 +77,11 @@ ZTEST(motion_detection_testsuite, test_motion_disabled_before_init)
 ZTEST(motion_detection_testsuite, test_motion_add_listener_succeeds)
 {
 	zassert_ok(motion_detection_listener_add(motion_detection_st_changed));
+}
+
+ZTEST(motion_detection_testsuite, test_motion_init_starts_with_uknown)
+{
+	zassert_ok(motion_detection_listener_add(motion_detection_st_changed));
+	zassert_ok(motion_detection_init());
+	zassert_equal(MOTION_ST_UNKNOWN, motion_st);
 }

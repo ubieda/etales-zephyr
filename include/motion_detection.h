@@ -5,6 +5,7 @@
 
 enum motion_st {
 	MOTION_ST_UNKNOWN,
+	MOTION_ST_INVALID,
 };
 
 typedef void (*motion_st_changed_t)(enum motion_st st);
