@@ -6,11 +6,13 @@
 #include <fake/stats.h>
 
 enum motion_st motion_st = MOTION_ST_INVALID;
+size_t motion_st_changed_count;
 
 void motion_detection_st_changed(enum motion_st st)
 {
 	printk("Motion state changed: %d\n", st);
 	motion_st = st;
+	motion_st_changed_count++;
 }
 
 void testcase_before(void *unused)
@@ -22,6 +24,7 @@ void testcase_after(void *unused)
 	motion_detection_teardown();
 	accel_fake_teardown();
 	motion_st = MOTION_ST_INVALID;
+	motion_st_changed_count = 0;
 }
 
 ZTEST_SUITE(motion_detection_testsuite, NULL, NULL,
@@ -167,4 +170,26 @@ ZTEST(motion_detection_testsuite, test_motion_st_idle_5_secs_after_motion)
 
 	k_sleep(K_SECONDS(5));
 	zassert_equal(MOTION_ST_IDLE, motion_st);
+}
+
+ZTEST(motion_detection_testsuite, test_motion_st_changed_only_called_once_per_transition)
+{
+	const struct sensor_value accel_fake_val[3] = {
+		{.val1 = 0,},{.val1 = 0,},{.val1 = 9,},
+	};
+	accel_fake_set_data(accel_fake_val, ARRAY_SIZE(accel_fake_val));
+
+	zassert_ok(motion_detection_listener_add(motion_detection_st_changed));
+	zassert_ok(motion_detection_init());
+
+	k_sleep(K_SECONDS(1));
+	zassert_equal(MOTION_ST_UNKNOWN, motion_st);
+	zassert_equal(1, motion_st_changed_count);
+
+	k_sleep(K_SECONDS(5));
+	zassert_equal(MOTION_ST_IDLE, motion_st);
+	zassert_equal(2, motion_st_changed_count);
+
+	k_sleep(K_SECONDS(1));
+	zassert_equal(2, motion_st_changed_count);
 }
