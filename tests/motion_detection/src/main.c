@@ -114,6 +114,9 @@ ZTEST(motion_detection_testsuite, test_motion_st_idle_if_no_motion_for_5_secs)
 	zassert_ok(motion_detection_listener_add(motion_detection_st_changed));
 	zassert_ok(motion_detection_init());
 
+	k_sleep(K_SECONDS(1));
+	zassert_equal(MOTION_ST_UNKNOWN, motion_st);
+
 	k_sleep(K_SECONDS(4));
 	zassert_equal(MOTION_ST_UNKNOWN, motion_st);
 
