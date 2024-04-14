@@ -13,20 +13,24 @@ const struct device *accel_dev = DEVICE_DT_GET(DT_NODELABEL(motion_accel));
 struct sensor_value accel_history[5][3];
 size_t motion_sample_ct;
 
-bool is_motion_detected(void)
+int is_motion_detected(uint32_t seconds, bool *result)
 {
-	if (motion_sample_ct < 2) {
-		return false;
+	if (motion_sample_ct < (seconds + 1)) {
+		return -EAGAIN;
 	}
 
-	for (size_t i = 0 ; i < 3 ; i++) {
-		if (abs(accel_history[(motion_sample_ct - 1)][i].val1
-			- accel_history[motion_sample_ct - 2][i].val1) >= 2) {
-			return true;
+	for (size_t j = 0 ; j < seconds ; j++) {
+		for (size_t i = 0 ; i < 3 ; i++) {
+			if (abs(accel_history[(motion_sample_ct - 1) % 5][i].val1
+				- accel_history[(motion_sample_ct - 2 -j) % 5][i].val1) >= 2) {
+				*result = true;
+				return 0;
+			}
 		}
 	}
 
-	return false;
+	*result = false;
+	return 0;
 }
 
 static void motion_detection_thread_fn(void *v1, void *v2, void *v3)
@@ -34,6 +38,7 @@ static void motion_detection_thread_fn(void *v1, void *v2, void *v3)
 	while (true) {
 		if (motion_detect_enabled) {
 			struct sensor_value accel_val[3] = {0};
+			bool motion_result = false;
 
 			k_sleep(K_SECONDS(1));
 
@@ -46,13 +51,12 @@ static void motion_detection_thread_fn(void *v1, void *v2, void *v3)
 
 			motion_sample_ct++;
 
-			if (is_motion_detected()) {
+			if (!is_motion_detected(1, &motion_result) && motion_result) {
 				module_listener(MOTION_ST_MOVEMENT);
-			}
-
-			if (motion_sample_ct == 5) {
+			} else if (!is_motion_detected(5, &motion_result) && !motion_result) {
 				module_listener(MOTION_ST_IDLE);
 			}
+
 		} else {
 			k_sleep(K_FOREVER);
 		}
