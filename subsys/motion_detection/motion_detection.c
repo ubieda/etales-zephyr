@@ -13,6 +13,8 @@ const struct device *accel_dev = DEVICE_DT_GET(DT_NODELABEL(motion_accel));
 struct sensor_value accel_history[5][3];
 size_t motion_sample_ct;
 
+enum motion_st module_detect_st = MOTION_ST_INVALID;
+
 int is_motion_detected(uint32_t seconds, bool *result)
 {
 	if (motion_sample_ct < (seconds + 1)) {
@@ -51,9 +53,13 @@ static void motion_detection_thread_fn(void *v1, void *v2, void *v3)
 
 			motion_sample_ct++;
 
-			if (!is_motion_detected(1, &motion_result) && motion_result) {
+			if (!is_motion_detected(1, &motion_result) && motion_result &&
+						module_detect_st != MOTION_ST_MOVEMENT) {
+				module_detect_st = MOTION_ST_MOVEMENT;
 				module_listener(MOTION_ST_MOVEMENT);
-			} else if (!is_motion_detected(5, &motion_result) && !motion_result) {
+			} else if (!is_motion_detected(5, &motion_result) && !motion_result &&
+				   module_detect_st != MOTION_ST_IDLE) {
+				module_detect_st = MOTION_ST_IDLE;
 				module_listener(MOTION_ST_IDLE);
 			}
 
@@ -90,6 +96,7 @@ void motion_detection_teardown(void)
 {
 	motion_detect_enabled = false;
 	motion_sample_ct = 0;
+	module_detect_st = MOTION_ST_INVALID;
 }
 
 int motion_detection_listener_add(motion_st_changed_t listener)
