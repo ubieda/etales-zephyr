@@ -138,3 +138,30 @@ ZTEST(motion_detection_testsuite, test_motion_st_motion_if_motion_in_1_sec)
 	k_sleep(K_SECONDS(1));
 	zassert_equal(MOTION_ST_MOVEMENT, motion_st);
 }
+
+ZTEST(motion_detection_testsuite, test_motion_st_idle_5_secs_after_motion)
+{
+	const struct sensor_value accel_fake_val[] = {
+		{.val1 = 0,},{.val1 = 0,},{.val1 = 9,},
+
+		{.val1 = 0,},{.val1 = 9,},{.val1 = 0,},
+		{.val1 = 0,},{.val1 = 9,},{.val1 = 0,},
+		{.val1 = 0,},{.val1 = 9,},{.val1 = 0,},
+		{.val1 = 0,},{.val1 = 9,},{.val1 = 0,},
+		{.val1 = 0,},{.val1 = 9,},{.val1 = 0,},
+		{.val1 = 0,},{.val1 = 9,},{.val1 = 0,},
+	};
+	accel_fake_set_data(accel_fake_val, ARRAY_SIZE(accel_fake_val));
+
+	zassert_ok(motion_detection_listener_add(motion_detection_st_changed));
+	zassert_ok(motion_detection_init());
+
+	k_sleep(K_SECONDS(1));
+	zassert_equal(MOTION_ST_UNKNOWN, motion_st);
+
+	k_sleep(K_SECONDS(1));
+	zassert_equal(MOTION_ST_MOVEMENT, motion_st);
+
+	k_sleep(K_SECONDS(5));
+	zassert_equal(MOTION_ST_IDLE, motion_st);
+}
