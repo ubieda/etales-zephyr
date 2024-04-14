@@ -8,7 +8,26 @@ motion_st_changed_t module_listener;
 
 const struct device *accel_dev = DEVICE_DT_GET(DT_NODELABEL(motion_accel));
 
+#define ACCEL_AXIS_NUMBER 3
+
+struct sensor_value accel_history[5][3];
 size_t motion_sample_ct;
+
+bool is_motion_detected(void)
+{
+	if (motion_sample_ct < 2) {
+		return false;
+	}
+
+	for (size_t i = 0 ; i < 3 ; i++) {
+		if (abs(accel_history[(motion_sample_ct - 1)][i].val1
+			- accel_history[motion_sample_ct - 2][i].val1) >= 2) {
+			return true;
+		}
+	}
+
+	return false;
+}
 
 static void motion_detection_thread_fn(void *v1, void *v2, void *v3)
 {
@@ -21,7 +40,16 @@ static void motion_detection_thread_fn(void *v1, void *v2, void *v3)
 			(void)sensor_sample_fetch(accel_dev);
 			(void)sensor_channel_get(accel_dev, SENSOR_CHAN_ACCEL_XYZ, accel_val);
 
+			accel_history[motion_sample_ct % 5][0] = accel_val[0];
+			accel_history[motion_sample_ct % 5][1] = accel_val[1];
+			accel_history[motion_sample_ct % 5][2] = accel_val[2];
+
 			motion_sample_ct++;
+
+			if (is_motion_detected()) {
+				module_listener(MOTION_ST_MOVEMENT);
+			}
+
 			if (motion_sample_ct == 5) {
 				module_listener(MOTION_ST_IDLE);
 			}
