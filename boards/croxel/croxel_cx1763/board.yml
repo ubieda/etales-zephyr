@@ -1,0 +1,5 @@
+board:
+  name: croxel_cx1763
+  vendor: croxel
+  socs:
+  - name: nrf52840
