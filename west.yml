@@ -1,7 +1,7 @@
 manifest:
   projects:
     - name: zephyr
-      revision: v3.5.0
+      revision: 92e0d0b
       url: https://github.com/zephyrproject-rtos/zephyr
       import: true
 
