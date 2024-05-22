@@ -4,9 +4,13 @@ Contains source code (libraries and examples) referenced on https://embeddedtale
 
 ## Libraries and Samples
 
-### Shell over Bluetooth LE
-- [Library](subsys/shell/backends)
-- [Device Sample](samples/subsys/shell/bluetooth)
+### Shell over Bluetooth LE - Deprecated
+
+This library is superseeded by the UART over Bluetooth LE on Upstream Zephyr.
+Upstream PR Link: (https://github.com/zephyrproject-rtos/zephyr/pull/69881).
+User CLI App is still valid.
+- [Library - Deprecated](subsys/shell/backends)
+- [Device Sample - Deprecated](samples/subsys/shell/bluetooth)
 - [User CLI App](scripts/bluetoothcli)
 
 ## Getting Started
