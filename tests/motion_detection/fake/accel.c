@@ -1,4 +1,4 @@
-#define DT_DRV_COMPAT fake_accel
+#define DT_DRV_COMPAT zephyr_fake_accel
 
 #include <zephyr/drivers/sensor.h>
 #include "fake/accel.h"

@@ -1,0 +1,5 @@
+tests:
+  lib.motion_detection:
+    platform_allow:
+      - qemu_cortex_m3
+      - native_sim

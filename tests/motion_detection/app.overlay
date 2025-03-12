@@ -1,6 +1,6 @@
 / {
 	motion_accel: motion_accel {
-		compatible = "fake,accel";
+		compatible = "zephyr,fake-accel";
 		status = "okay";
 	};
 };
